@@ -1,4 +1,4 @@
-import java.util.Scanner;
+fimport java.util.Scanner;
 
 /**
  * A simple class to run the Magpie class.
@@ -13,7 +13,7 @@ public class MagpieRunner
   */
  public static void main(String[] args)
  {
-  Magpie2 maggie = new Magpie2();
+  Magpie maggie = new Magpie();
   
   System.out.println (maggie.getGreeting());
   Scanner in = new Scanner (System.in);

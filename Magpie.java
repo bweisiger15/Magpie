@@ -31,12 +31,15 @@ public class Magpie
   public String getResponse(String statement)
   {
     String response = "";
+    if (statement.trim().length() == 0)
+    {
+      response = "Please say something.";
+    }
     
-    
-    if (statement.indexOf("mother") >= 0
-          || statement.indexOf("father") >= 0
-          || statement.indexOf("sister") >= 0
-          || statement.indexOf("brother") >= 0)
+    else if (statement.indexOf("mother") >= 0
+               || statement.indexOf("father") >= 0
+               || statement.indexOf("sister") >= 0
+               || statement.indexOf("brother") >= 0)
     {
       response = "Tell me more about your family.";
     }
@@ -52,8 +55,21 @@ public class Magpie
                || statement.indexOf("kiang") >= 0 
                || statement.indexOf("landgraf") >= 0)
     {
-      response = "Your teachers sound nice.";
+      response = "Your teacher sounds nice.";
     }
+    else if (statement.indexOf("school") >= 0 
+               || statement.indexOf("School") >= 0)
+      
+    {
+      response = "Tell me about your favorite subject.";
+    }
+    else if (statement.indexOf("song") >= 0
+               || statement.indexOf("Song") >= 0 
+               || statement.indexOf("music") >= 0 
+               || statement.indexOf("Music") >= 0)
+    {
+      response = "Tell me more about the music you listen to.";
+    } 
     else if (statement.indexOf("no") >= 0)
     {
       response = "Why so negative?";
@@ -72,7 +88,7 @@ public class Magpie
    */
   private String getRandomResponse()
   {
-    final int NUMBER_OF_RESPONSES = 4;
+    final int NUMBER_OF_RESPONSES = 6;
     double r = Math.random();
     int whichResponse = (int)(r * NUMBER_OF_RESPONSES);
     String response = "";
@@ -93,6 +109,15 @@ public class Magpie
     {
       response = "You don't say.";
     }
+    else if (whichResponse == 4)
+    {
+      response = "Cool!";
+    }
+    else if (whichResponse == 5)
+    {
+      response = "I see.";
+    }
+    
     
     return response;
   }
