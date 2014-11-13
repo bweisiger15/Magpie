@@ -97,24 +97,63 @@ public class Magpie
       }
       else
       {
-        //  Part of student solution
-        // Look for a two word (I <something> you)
-        // pattern
-        psn = findKeyword(statement, "i", 0);
-        
-        if (psn >= 0
-              && findKeyword(statement, "you", psn) >= 0)
+        //look for the word is
+        //Move the is to the front and put why in front of it
+        psn = findKeyword(statement, "is", 0);
+        if (psn >= 0)
         {
-          response = transformIYouStatement(statement);
+          response = transformIsStatement(statement);
         }
         else
         {
-          response = getRandomResponse();
+          psn =findKeyword (statement, "I", 0);
+          if (psn >= 0 
+                && findKeyword(statement, "am", psn) >= 0)
+          {
+            response = transformIAmStatement(statement);
+          }
+          else
+          {
+            //look for "you are" & "they are" statements
+            psn = findKeyword (statement, "are", 0);
+            if (psn >= 0 
+                  && findKeyword(statement, "you") < 0)
+            {
+              response = transformTheyAreStatement(statement);
+            }
+            
+            //else
+            // Move the are to the front
+            //if you comes before are change you to I
+            //else change you to me
+            else
+            {
+              //  Part of student solution
+              // Look for a two word (I <something> you)
+              // pattern
+              psn = findKeyword(statement, "i", 0);
+              
+              if (psn >= 0
+                    && findKeyword(statement, "you", psn) >= 0)
+              {
+                response = transformIYouStatement(statement);
+              }
+              else
+              {
+                response = getRandomResponse();
+              }
+            }
+          }
+          
         }
+        
       }
+      
     }
     return response;
   }
+  
+  
   
   /**
    * Take a statement with "I want to <something>." and transform it into 
@@ -122,7 +161,40 @@ public class Magpie
    * @param statement the user statement, assumed to contain "I want to"
    * @return the transformed statement
    */
-  
+  private String transformYouAreStatement(String statement)
+  {
+    //move the are to the front and put why in front of it
+    statement = statement.trim();
+    String lastChar = statement.substring(statement
+                                            .length() - 1);
+    if (lastChar.equals("."))
+    {
+      statement = statement.substring(0, statement
+                                        .length() - 1);
+    }
+    int psn = findKeyword (statement, "you", 0);
+    String restOfStatement = statement.substring(psn + 4).trim();
+    String beginningOfStatement = statement.substring(0, psn).trim();
+    return beginningOfStatement + " me " + restOfStatement;
+  }
+  private String transformTheyAreStatement(String statement)
+  {
+    //move the are to the front and put why in front of it
+    statement = statement.trim();
+    String lastChar = statement.substring(statement
+                                            .length() - 1);
+    if (lastChar.equals("."))
+    {
+      statement = statement.substring(0, statement
+                                        .length() - 1);
+    }
+    int psn = findKeyword (statement, "are", 0);
+    String restOfStatement = statement.substring(psn + 4).trim();
+    String beginningOfStatement = statement.substring(0, psn).trim();
+    //forms the neq question with the original sentence ("is" taken out), 
+    //"Why is" is in front, and everything else is lowercased
+    return "Why are " + beginningOfStatement.toLowerCase() + " " + restOfStatement.toLowerCase() + "?";
+  }
   
   private String transformIWantToStatement(String statement)
   {
@@ -138,6 +210,35 @@ public class Magpie
     int psn = findKeyword (statement, "I want to", 0);
     String restOfStatement = statement.substring(psn + 9).trim();
     return "What would it mean to " + restOfStatement + "?";
+  }
+  private String transformIsStatement(String statement)
+  {
+    statement = statement.trim();
+    String lastChar = statement.substring(statement.length() - 1);
+    if (lastChar.equals("."))
+    {
+      statement = statement.substring(0, statement.length() - 1);
+    }
+    int psn = findKeyword (statement, "is", 0);
+    //separate the beginning of the sentence (up until the "is") from the 
+    //end of the sentence (everything after the "is")
+    String restOfStatement = statement.substring(psn + 3).trim();
+    String beginningOfStatement = statement.substring(0, psn).trim();
+    //forms the neq question with the original sentence ("is" taken out), 
+    //"Why is" is in front, and everything else is lowercased
+    return "Why is " + beginningOfStatement.toLowerCase() + " " + restOfStatement.toLowerCase() + "?";
+  }
+  private String transformIAmStatement(String statement)
+  {
+    statement = statement.trim();
+    String lastChar = statement.substring(statement.length() - 1);
+    if (lastChar.equals("."))
+    {
+      statement = statement.substring(0, statement.length() - 1);
+    }
+    int psn = findKeyword (statement, "I am", 0);
+    String restOfStatement = statement.substring(psn + 4).trim();
+    return "Why are you " + restOfStatement + "?";
   }
   private String transformIWantStatement(String statement)
   {
@@ -317,5 +418,11 @@ public class Magpie
     * @return a non-committal string
     */
 }
+
+
+
+
+
+
 
 
